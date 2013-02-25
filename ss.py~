@@ -279,10 +279,10 @@ def idle_handler(widget) :
         
     for l in range( len( binaryLines.lines ) ):
         if (binaryLines.lines[l].state):
-            x1 = int(0.9 * binaryLines.lines[l].fx1 * w + w * .05)
-            x2 = int(0.9 * binaryLines.lines[l].fx2 * w + w * .05)
-            y1 = int(0.9 * binaryLines.lines[l].fy1 * h + h * .05)
-            y2 = int(0.9 * binaryLines.lines[l].fy2 * h + h * .05)
+            x1 = int(0.8 * binaryLines.lines[l].fx1 * w + w * .10)
+            x2 = int(0.8 * binaryLines.lines[l].fx2 * w + w * .10)
+            y1 = int(0.8 * binaryLines.lines[l].fy1 * h + h * .10)
+            y2 = int(0.8 * binaryLines.lines[l].fy2 * h + h * .10)
             
 
             # Change the color a little bit:
