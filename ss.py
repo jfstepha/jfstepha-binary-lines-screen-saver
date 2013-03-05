@@ -41,6 +41,9 @@ class BinaryLines():
         self.r = 0
         self.g = 0
         self.b = 0
+        self.lr = 0
+        self.lg = 0
+        self.lb = 0
     ################################################
     def read_file(self, filename):
     ################################################
@@ -292,16 +295,16 @@ def idle_handler(widget) :
                 xgc.set_rgb_fg_color(gtk.gdk.Color(65535 - lr, 65535-lg, 65535-lb))
             xgc.set_line_attributes( int( h / 100) , gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_ROUND)
             
-            lr = lr + cj2
-            if lr > 65535 - colorjump:
-                lr = 0
-                lg = lg + cj2
-            if lg > 65535 - cj2:
-                lb = lb + cj2
-            if lb > 32000 - cj2 :
-                lr = 0
-                lg = 0
-                lb = 0
+            binaryLines.lr = binaryLines.lr + cj2
+            if binaryLines.lr > 65535 - colorjump:
+                binaryLines.lr = 0
+                binaryLines.lg = binaryLines.lg + cj2
+            if binaryLines.lg > 65535 - cj2:
+                binaryLines.lb = binaryLines.lb + cj2
+            if binaryLines.lb > 32000 - cj2 :
+                binaryLines.lr = 0
+                binaryLines.lg = 0
+                binaryLines.lb = 0
 
             # Draw the new line
             print("drawing line (%d, %d) to (%d, %d)" % (binaryLines.lines[l].ix1,binaryLines.lines[l].iy1,binaryLines.lines[l].ix2,binaryLines.lines[l].iy2))
@@ -313,6 +316,7 @@ def idle_handler(widget) :
 
     # Return True so we'll be called again:
     # sleep(4)
+    print("line color (%d %d %d)" % (binaryLines.lr, binaryLines.lg, binaryLines.lb))
     binaryLines.increment_state()
     return True
 
@@ -383,4 +387,5 @@ if args.win == False:
 
 
 gtk.main()
+
 
