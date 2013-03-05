@@ -242,12 +242,9 @@ y1 = None
 y2 = None
 movesize = 20
 colorjump = 1 
-lr = 0
-lg = 0
-lb = 0
 
 def idle_handler(widget) :
-    global xgc, x1, x2, y1, y2, movesize, colorjump, lr, lg, lb
+    global xgc, x1, x2, y1, y2, movesize, colorjump
     global binaryLines
     global then
     
@@ -258,9 +255,6 @@ def idle_handler(widget) :
 
     if (xgc == None) :
         xgc = widget.window.new_gc()
-        lr = 0
-        lg = 0
-        lb = 0
     w, h = widget.window.get_size()
     binaryLines.r = binaryLines.r + colorjump
     if binaryLines.r > 65535 - colorjump:
@@ -290,9 +284,9 @@ def idle_handler(widget) :
 
             # Change the color a little bit:
             if binaryLines.b > 32000:
-                xgc.set_rgb_fg_color(gtk.gdk.Color(lr, lg, lb))
+                xgc.set_rgb_fg_color(gtk.gdk.Color(binaryLines.lr, binaryLines.lg, binaryLines.lb))
             else:
-                xgc.set_rgb_fg_color(gtk.gdk.Color(65535 - lr, 65535-lg, 65535-lb))
+                xgc.set_rgb_fg_color(gtk.gdk.Color(65535 - binaryLines.lr, 65535-binaryLines.lg, 65535-binaryLines.lb))
             xgc.set_line_attributes( int( h / 100) , gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_ROUND)
             
             binaryLines.lr = binaryLines.lr + cj2
