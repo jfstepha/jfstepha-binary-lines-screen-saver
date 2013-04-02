@@ -242,11 +242,20 @@ y1 = None
 y2 = None
 movesize = 20
 colorjump = 1 
+w = 0
+h = 0
+scale = 0.0
+scale0 = 0.0
+sizedir = -1
+sizedir0 = 0
+scalestep = 0.1
+import random
 
 def idle_handler(widget) :
     global xgc, x1, x2, y1, y2, movesize, colorjump
     global binaryLines
     global then
+    global w, h, scale0, w0, h0, w_min, h_min, sizedir, sizedir0,scale, scalestep
     
     if time.time() - then < 1:
         sleep( 0.1)
@@ -256,6 +265,26 @@ def idle_handler(widget) :
     if (xgc == None) :
         xgc = widget.window.new_gc()
     w, h = widget.window.get_size()
+    if (scale == 0) :
+        w0 = 0
+        h0 = 0
+        sizedir0 = random.randint(0,1)
+        scale = 1
+    scale = scale + scalestep * sizedir
+    scale0 = 0.05 + (1-scale) * sizedir0
+
+    if scale < 0.5 :
+        sizedir = 1
+        scale = 0.5
+    if scale > 1 :
+        sizedir0 = random.uniform(0,1)
+        scalestep = random.uniform(0.0001,0.001)
+        sizedir = -1
+        scale = 1
+        w0 = 0
+        h0 = 0
+
+
     binaryLines.r = binaryLines.r + colorjump
     if binaryLines.r > 65535 - colorjump:
         binaryLines.r = 0
@@ -276,11 +305,10 @@ def idle_handler(widget) :
         
     for l in range( len( binaryLines.lines ) ):
         if (binaryLines.lines[l].state):
-            x1 = int(0.9 * binaryLines.lines[l].fx1 * w + w * .05)
-            x2 = int(0.9 * binaryLines.lines[l].fx2 * w + w * .05)
-            y1 = int(0.9 * binaryLines.lines[l].fy1 * h + h * .05)
-            y2 = int(0.9 * binaryLines.lines[l].fy2 * h + h * .05)
-            
+            x1 = int(0.9 * binaryLines.lines[l].fx1 * w * scale + w * scale0)
+            x2 = int(0.9 * binaryLines.lines[l].fx2 * w * scale + w * scale0)
+            y1 = int(0.9 * binaryLines.lines[l].fy1 * h * scale + h * scale0)
+            y2 = int(0.9 * binaryLines.lines[l].fy2 * h * scale + h * scale0)
 
             # Change the color a little bit:
             if binaryLines.b > 32000:
@@ -305,12 +333,13 @@ def idle_handler(widget) :
             widget.window.draw_line(xgc, x1, y1, x2, y2)
             pangolayout = widget.create_pango_layout("")
             pangolayout.set_text(binaryLines.statestring)
-            widget.window.draw_layout( xgc, 5, 5, pangolayout)
+            widget.window.draw_layout( xgc, w*scale0/2, h*scale0/2, pangolayout)
 
 
     # Return True so we'll be called again:
     # sleep(4)
     print("line color (%d %d %d)" % (binaryLines.lr, binaryLines.lg, binaryLines.lb))
+    print("w:%d h:%d scalestep:%0.5f scale0:%0.3f scale:%0.3f sizedir:%d sizedir0:%0.3f \n" % (w,h,scalestep,scale0,scale,sizedir,sizedir0))
     binaryLines.increment_state()
     return True
 
