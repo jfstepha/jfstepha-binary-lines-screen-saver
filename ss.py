@@ -248,6 +248,7 @@ scale = 0.0
 scale0 = 0.0
 sizedir = -1
 sizedir0 = 0
+sizedir1 = 0
 scalestep = 0.1
 import random
 
@@ -255,7 +256,7 @@ def idle_handler(widget) :
     global xgc, x1, x2, y1, y2, movesize, colorjump
     global binaryLines
     global then
-    global w, h, scale0, w0, h0, w_min, h_min, sizedir, sizedir0,scale, scalestep
+    global w, h, scale0, w0, h0, w_min, h_min, sizedir, sizedir0, sizedir1, scale, scalestep, xdir
     
     if time.time() - then < 1:
         sleep( 0.1)
@@ -269,15 +270,18 @@ def idle_handler(widget) :
         w0 = 0
         h0 = 0
         sizedir0 = random.randint(0,1)
+        sizedir1 = random.randint(0,1)
         scale = 1
     scale = scale + scalestep * sizedir
     scale0 = 0.05 + (1-scale) * sizedir0
+    scale1 = 0.05 + (1-scale) * sizedir1
 
     if scale < 0.5 :
         sizedir = 1
         scale = 0.5
     if scale > 1 :
         sizedir0 = random.uniform(0,1)
+        sizedir1 = random.uniform(0,1)
         scalestep = random.uniform(0.0001,0.001)
         sizedir = -1
         scale = 1
@@ -305,8 +309,8 @@ def idle_handler(widget) :
         
     for l in range( len( binaryLines.lines ) ):
         if (binaryLines.lines[l].state):
-            x1 = int(0.9 * binaryLines.lines[l].fx1 * w * scale + w * scale0)
-            x2 = int(0.9 * binaryLines.lines[l].fx2 * w * scale + w * scale0)
+            x1 = int(0.9 * binaryLines.lines[l].fx1 * w * scale + w * scale1)
+            x2 = int(0.9 * binaryLines.lines[l].fx2 * w * scale + w * scale1)
             y1 = int(0.9 * binaryLines.lines[l].fy1 * h * scale + h * scale0)
             y2 = int(0.9 * binaryLines.lines[l].fy2 * h * scale + h * scale0)
 
