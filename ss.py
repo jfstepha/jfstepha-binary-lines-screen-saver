@@ -304,7 +304,7 @@ def idle_handler(widget) :
     while binaryLines.check_skipstate():
         print("skipping state %d" % binaryLines.state)
         binaryLines.increment_state()
-    cj2 = 10
+    cj2 = 100
     
         
     for l in range( len( binaryLines.lines ) ):
@@ -322,10 +322,11 @@ def idle_handler(widget) :
             xgc.set_line_attributes( int( h / 100) , gtk.gdk.LINE_SOLID, gtk.gdk.CAP_ROUND, gtk.gdk.JOIN_ROUND)
             
             binaryLines.lr = binaryLines.lr + cj2
-            if binaryLines.lr > 65535 - colorjump:
+            if binaryLines.lr > 65535 - cj2:
                 binaryLines.lr = 0
                 binaryLines.lg = binaryLines.lg + cj2
             if binaryLines.lg > 65535 - cj2:
+                binaryLines.lg = 0
                 binaryLines.lb = binaryLines.lb + cj2
             if binaryLines.lb > 32000 - cj2 :
                 binaryLines.lr = 0
