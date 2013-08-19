@@ -328,7 +328,7 @@ def idle_handler(widget) :
             if binaryLines.lg > 65535 - cj2:
                 binaryLines.lg = 0
                 binaryLines.lb = binaryLines.lb + cj2
-            if binaryLines.lb > 32000 - cj2 :
+            if binaryLines.lb > 65535 - cj2 :
                 binaryLines.lr = 0
                 binaryLines.lg = 0
                 binaryLines.lb = 0
