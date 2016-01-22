@@ -178,17 +178,19 @@ class BinaryLines():
             if ( ls.ix1 == ls.ix2 and ls.iy1 == ls.iy2 ) :
                 for l2 in range( len (binaryLines.lines ) ):
                     ls2 = self.lines[l2]
+                    # print("checking (%d %d)-(%d %d) and (%d %d)-(%d %d)" % (ls.ix1, ls.iy1, ls.ix2, ls.iy2, ls2.ix1, ls2.iy1, ls2.ix2, ls2.iy2))
                     if self.lines[l2].state == 0:
+                        # print "  its off"
                         continue 
-                    if ( ls2.ix1 == ls2.ix1 and ls2.iy1 == ls2.iy2):
+                    if ( (ls2.ix1 == ls2.ix2) and (ls2.iy1 == ls2.iy2)):
                         # it's a dot 
+                        # print "  its a dot"
                         continue
-                    # print("checking (%d %d)-(%d %d) and (%d %d)-(%d %d)" % (ls.x1, ls.y1, ls.x2, ls.y2, ls2.x1, ls2.y1, ls2.x2, ls2.y2))
-                    if( ls.ix1 == ls2.ix1 and ls.iy1 == ls2.iy1 ):
-                        print("skipping dot (%d %d) line (%d %d)-(%d %d)" % (ls.ix1, ls.iy1, ls2.ix1, ls2.iy1, ls2.ix2, ls2.iy2))
+                    if( (ls.ix1 == ls2.ix1) and (ls.iy1 == ls2.iy1) ):
+                        # print("skipping dot (%d %d) line (%d %d)-(%d %d)" % (ls.ix1, ls.iy1, ls2.ix1, ls2.iy1, ls2.ix2, ls2.iy2))
                         return True
-                    if( ls.ix1 == ls2.ix2 and ls.iy1 == ls2.iy2):
-                        print("skipping dot (%d %d) line (%d %d)-(%d %d)" % (ls.ix1, ls.iy1, ls2.ix1, ls2.iy1, ls2.ix2, ls2.iy2))
+                    if( (ls.ix1 == ls2.ix2) and (ls.iy1 == ls2.iy2)):
+                        # print("skipping dot (%d %d) line (%d %d)-(%d %d)" % (ls.ix1, ls.iy1, ls2.ix1, ls2.iy1, ls2.ix2, ls2.iy2))
                         return True
             if ls.ix1 > x_max:
                 x_max = ls.ix1
@@ -334,7 +336,10 @@ def idle_handler(widget) :
                 binaryLines.lb = 0
 
             # Draw the new line
-            print("drawing line (%d, %d) to (%d, %d)" % (binaryLines.lines[l].ix1,binaryLines.lines[l].iy1,binaryLines.lines[l].ix2,binaryLines.lines[l].iy2))
+            if (x1 == x2 and y1 == y2):
+                print("drawing dot  (%d, %d) to (%d, %d) (DOT)" % (binaryLines.lines[l].ix1,binaryLines.lines[l].iy1,binaryLines.lines[l].ix2,binaryLines.lines[l].iy2))
+            else:
+                print("drawing line (%d, %d) to (%d, %d)" % (binaryLines.lines[l].ix1,binaryLines.lines[l].iy1,binaryLines.lines[l].ix2,binaryLines.lines[l].iy2))
             widget.window.draw_line(xgc, x1, y1, x2, y2)
             pangolayout = widget.create_pango_layout("")
             pangolayout.set_text(binaryLines.statestring)
