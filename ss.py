@@ -107,6 +107,19 @@ class BinaryLines():
         for i in range( len (self.lines)):
             l = self.lines[i]
             print(" (%d,%d)-(%d,%d) " % (l.ix1, l.iy1, l.ix2, l.iy2))
+    ################################################
+    def set_state(self,new_state):
+    ################################################
+        self.state = new_state
+        self.statestring = ""
+        for l in range( len( binaryLines.lines ) ):
+            if ( new_state & (1 << l) ):
+                binaryLines.lines[l].state = True
+                self.statestring = '1' + self.statestring 
+            else:
+                binaryLines.lines[l].state = False
+                self.statestring = '0' + self.statestring 
+        print ("current state: %d (%s)" % (self.state, self.statestring))
                             
     ################################################
     def increment_state(self):
@@ -343,7 +356,8 @@ def idle_handler(widget) :
             widget.window.draw_line(xgc, x1, y1, x2, y2)
             pangolayout = widget.create_pango_layout("")
             pangolayout.set_text(binaryLines.statestring)
-            widget.window.draw_layout( xgc, w*scale0/2, h*scale0/2, pangolayout)
+            print("w:%d h:%d scale0:%d" % (w, h, scale0) )
+            widget.window.draw_layout( xgc, int(w*scale0/2), int(h*scale0/2), pangolayout)
 
 
     # Return True so we'll be called again:
@@ -359,6 +373,7 @@ def read_args():
     parser = argparse.ArgumentParser(description='a binary line screen saver')
     parser.add_argument("--win", action='store_true', help="Run in windowed mode")
     parser.add_argument("--restart ", dest='size', type=int, help="Restart the map from scratch")
+    parser.add_argument("--init", dest='state', type=int, help="Start from a given state (must be used with restart and a size)")
     return parser.parse_args()
 #################################################################################
 #################################################################################
@@ -370,7 +385,7 @@ def read_args():
 # create the data object
 binaryLines = BinaryLines()
 args = read_args()
-if args.size == None:
+if args.size == None :
     home = os.getenv('USERPROFILE') or os.getenv('HOME')
     try:
         f = open(home + "/.binarylines", 'r')
@@ -380,7 +395,10 @@ if args.size == None:
         binaryLines.initialize(2)
     binaryLines.dump()
 else:
+    print("INITIALIZING")
     binaryLines.initialize( args.size )
+    if args.state != None:
+        binaryLines.set_state( args.state )
 
 ### init stuff ####
 then = 0
